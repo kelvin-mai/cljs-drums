@@ -3,23 +3,33 @@
 
 (enable-console-print!)
 
-(println "This text is printed from src/cljs-drums/core.cljs. Go ahead and edit it and see reloading in action.")
+(def drum-keys [{:id "boom" :letter "Q" :src "boom.wav"}
+                {:id "clap" :letter "W" :src "clap.wav"}
+                {:id "hihat" :letter "E" :src "hihat.wav"}
+                {:id "kick" :letter "A" :src "kick.wav"}
+                {:id "openhat" :letter "S" :src "openhat.wav"}
+                {:id "ride" :letter "D" :src "ride.wav"}
+                {:id "snare" :letter "Z" :src "snare.wav"}
+                {:id "tink" :letter "X" :src "tink.wav"}
+                {:id "tom" :letter "C" :src "tom.wav"}])
 
-;; define your app data so that it doesn't get over-written on reload
+(defonce app-state (atom {:text "Drum Machine"}))
 
-(defonce app-state (atom {:text "Hello world!"}))
+(defn drum-pad [{id :id
+                 letter :letter
+                 src :src} drum-key]
+  [:div {:id id
+         :key id}
+   [:h3 letter]
+   [:audio {:id id
+            :src src}]])
 
-
-(defn hello-world []
-  [:div
+(defn drum-machine []
+  [:div#drum-machine
    [:h1 (:text @app-state)]
-   [:h3 "Edit this and watch it change!"]])
+   (map drum-pad drum-keys)])
 
-(reagent/render-component [hello-world]
+(reagent/render-component [drum-machine]
                           (. js/document (getElementById "app")))
 
-(defn on-js-reload []
-  ;; optionally touch your app-state to force rerendering depending on
-  ;; your application
-  ;; (swap! app-state update-in [:__figwheel_counter] inc)
-  )
+(defn on-js-reload [])
